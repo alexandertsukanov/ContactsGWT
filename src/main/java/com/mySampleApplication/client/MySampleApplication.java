@@ -29,9 +29,9 @@ public class MySampleApplication implements EntryPoint {
         @Override
         public void onClick(ClickEvent event) {
             Contacts a = new Contacts();
-            a.setName("NAME");
-            a.setSurname("SURNAME");
-            a.setPhoneNumber("PHONE");
+            a.setName("Name");
+            a.setSurname("Surname");
+            a.setPhoneNumber("Phone");
             rpcService.saveUser(a, new AsyncCallback<Contacts>() {
                 @Override
                 public void onFailure(Throwable caught) {
@@ -117,6 +117,7 @@ public class MySampleApplication implements EntryPoint {
         table.addColumn(phoneColumn, "Phone Number");
         table.addColumn(deleteBtn, "");
 
+
         nameColumn.setFieldUpdater(new FieldUpdater<Contacts, String>() {
             @Override
             public void update(int index, final Contacts object, String value) {
@@ -145,23 +146,27 @@ public class MySampleApplication implements EntryPoint {
 
             @Override
             public void update(int index, final Contacts object, String value) {
-                rpcService.deleteUser(object, new AsyncCallback<Contacts>() {
-                    @Override
-                    public void onFailure(Throwable caught) {
+                boolean confirmed = Window.confirm("Do you want to delete " + object.getName()+ " contact?");
+                if(confirmed) {
+                    rpcService.deleteUser(object, new AsyncCallback<Contacts>() {
+                        @Override
+                        public void onFailure(Throwable caught) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onSuccess(Contacts result) {
+                        @Override
+                        public void onSuccess(Contacts result) {
 
-                    }
-                });
-                dataProvider.getList().remove(object);
-                dataProvider.refresh();
-
+                        }
+                    });
+                    dataProvider.getList().remove(object);
+                    dataProvider.refresh();
+                }
+               else{
+                    return;
+                }
             }
         });
-
 
 
         rpcService.getAllUsers(new AsyncCallback<List<Contacts>>() {
@@ -177,7 +182,8 @@ public class MySampleApplication implements EntryPoint {
                 }
             }
         });
-
+        addButton.setStyleName("AddButton");
+        saveButton.setStyleName("SaveButton");
         RootPanel.get().add(addButton);
         RootPanel.get().add(saveButton);
         RootPanel.get().add(table);
