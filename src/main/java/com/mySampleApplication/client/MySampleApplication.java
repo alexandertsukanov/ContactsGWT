@@ -16,6 +16,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.view.client.ListDataProvider;
 import com.mySampleApplication.entity.Contacts;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MySampleApplication implements EntryPoint {
@@ -32,37 +33,28 @@ public class MySampleApplication implements EntryPoint {
             a.setName("Name");
             a.setSurname("Surname");
             a.setPhoneNumber("Phone");
-            rpcService.saveUser(a, new AsyncCallback<Contacts>() {
-                @Override
-                public void onFailure(Throwable caught) {
-
-                }
-                @Override
-                public void onSuccess(Contacts result) {
-
-                }
-            });
             dataProvider.getList().add(a);
             dataProvider.refresh();
-            Window.Location.reload();
         }
     });
+
 
     Button saveButton = new Button("Save", new ClickHandler() {
         @Override
         public void onClick(ClickEvent event) {
-            for (Contacts c : contactsList){
-                rpcService.updateUser(c, new AsyncCallback<Contacts>() {
+            List<Contacts>  integerList = new ArrayList<>();
+            integerList.addAll(contactsList);
+                rpcService.updateUser(integerList, new AsyncCallback<Contacts>() {
                     @Override
                     public void onFailure(Throwable caught) {
 
                     }
+
                     @Override
                     public void onSuccess(Contacts result) {
 
                     }
                 });
-            }
             Window.alert("Contacts saved.");
         }
     });
@@ -111,12 +103,6 @@ public class MySampleApplication implements EntryPoint {
         };
 
         dataProvider.addDataDisplay(table);
-
-        table.addColumn(nameColumn, "Name");
-        table.addColumn(surnameColumn, "Surname");
-        table.addColumn(phoneColumn, "Phone Number");
-        table.addColumn(deleteBtn, "");
-
 
         nameColumn.setFieldUpdater(new FieldUpdater<Contacts, String>() {
             @Override
@@ -168,7 +154,6 @@ public class MySampleApplication implements EntryPoint {
             }
         });
 
-
         rpcService.getAllUsers(new AsyncCallback<List<Contacts>>() {
             @Override
             public void onFailure(Throwable caught) {
@@ -182,8 +167,14 @@ public class MySampleApplication implements EntryPoint {
                 }
             }
         });
+        table.addColumn(nameColumn, "Name");
+        table.addColumn(surnameColumn, "Surname");
+        table.addColumn(phoneColumn, "Phone Number");
+        table.addColumn(deleteBtn, "");
+
         addButton.setStyleName("AddButton");
         saveButton.setStyleName("SaveButton");
+
         RootPanel.get().add(addButton);
         RootPanel.get().add(saveButton);
         RootPanel.get().add(table);
