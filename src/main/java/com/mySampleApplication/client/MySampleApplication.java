@@ -42,9 +42,9 @@ public class MySampleApplication implements EntryPoint {
     Button saveButton = new Button("Save", new ClickHandler() {
         @Override
         public void onClick(ClickEvent event) {
-            List<Contacts>  integerList = new ArrayList<>();
-            integerList.addAll(contactsList);
-                rpcService.updateUser(integerList, new AsyncCallback<Contacts>() {
+            List<Contacts>  tmpList = new ArrayList<>();
+            tmpList.addAll(contactsList);
+                rpcService.updateUser(tmpList, new AsyncCallback<Contacts>() {
                     @Override
                     public void onFailure(Throwable caught) {
 
