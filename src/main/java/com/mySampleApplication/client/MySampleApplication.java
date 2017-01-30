@@ -102,8 +102,6 @@ public class MySampleApplication implements EntryPoint {
             }
         };
 
-        dataProvider.addDataDisplay(table);
-
         nameColumn.setFieldUpdater(new FieldUpdater<Contacts, String>() {
             @Override
             public void update(int index, final Contacts object, String value) {
@@ -167,6 +165,9 @@ public class MySampleApplication implements EntryPoint {
                 }
             }
         });
+
+        dataProvider.addDataDisplay(table);
+
         table.addColumn(nameColumn, "Name");
         table.addColumn(surnameColumn, "Surname");
         table.addColumn(phoneColumn, "Phone Number");
